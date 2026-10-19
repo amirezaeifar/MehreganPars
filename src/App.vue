@@ -3,11 +3,13 @@ import { ref, watch, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { Menu, X, Search, ArrowUpLeft, ArrowLeft, HeartPulse, Mail, Building2, Stethoscope, BookOpenText } from 'lucide-vue-next'
 import { platforms } from './data'
-import { t } from './i18n'
+import { t, language } from './i18n'
 import { useArticles } from './store'
+import SlidingIndicator from './components/SlidingIndicator.vue'
+import LanguageButton from './components/LanguageButton.vue'
 const route=useRoute(), opened=ref(''), mobile=ref(false), search=ref('')
 const { published } = useArticles()
-const corporate=computed(()=>!route.path.startsWith('/admin')&&!/^\/platforms\/[^/]+$/.test(route.path))
+const corporate=computed(()=>route.path!=='/shop'&&!route.path.startsWith('/admin')&&!/^\/platforms\/[^/]+$/.test(route.path))
 const groups=computed(()=>[{id:'brands',label:t('دنیای مهرگان','Our brands'),path:'/platforms'},{id:'stories',label:t('مجله سلامت','Health journal'),path:'/magazine'}])
 const categories=computed(()=>[...new Set(published.value.map(article=>article.category))])
 const normalizedSearch=computed(()=>search.value.trim().toLocaleLowerCase())
@@ -16,6 +18,18 @@ const articleResults=computed(()=>normalizedSearch.value ? published.value.filte
 watch(()=>route.fullPath,()=>{opened.value='';mobile.value=false;search.value=''})
 function toggle(id:string){opened.value=opened.value===id?'':id;if(id==='search'&&opened.value)nextTick(()=>document.querySelector<HTMLInputElement>('.global-search input')?.focus())}
 let revealObserver: IntersectionObserver | undefined
+let textObserver: MutationObserver | undefined
+function normalizeHeadings() {
+  document.querySelectorAll('.site-shell h1, .site-shell h2, .site-shell h3, .site-shell h4, .site-shell h5, .site-shell h6').forEach(heading => {
+    const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT)
+    let node: Node | null
+    while ((node = walker.nextNode())) {
+      const text = node.textContent || ''
+      const clean = text.replace(/[.۔]+(?=\s|$)/g, '')
+      if (text !== clean) node.textContent = clean
+    }
+  })
+}
 function revealSections(){
   if(typeof IntersectionObserver==='undefined'||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return
   revealObserver?.disconnect()
@@ -26,15 +40,16 @@ function revealSections(){
     element.classList.add('reveal-ready');revealObserver?.observe(element)
   })
 }
-onMounted(()=>nextTick(revealSections))
-watch(()=>route.fullPath,()=>nextTick(revealSections))
-onUnmounted(()=>revealObserver?.disconnect())
+onMounted(()=>nextTick(()=>{revealSections();normalizeHeadings();textObserver=new MutationObserver(()=>normalizeHeadings());textObserver.observe(document.querySelector('.site-shell')!,{subtree:true,childList:true,characterData:true})}))
+watch(()=>route.fullPath,()=>nextTick(()=>{revealSections();normalizeHeadings()}))
+watch(language,()=>nextTick(normalizeHeadings))
+onUnmounted(()=>{revealObserver?.disconnect();textObserver?.disconnect()})
 
 </script>
 <template>
-<div class="site-shell">
+<div class="site-shell" :class="{english:language==='en','corporate-site':corporate}">
 <header v-if="corporate" class="global-header" @keydown.esc="opened='';mobile=false" @mouseleave="opened=''">
- <div class="global-bar"><RouterLink to="/" class="wordmark" :aria-label="t('صفحه اصلی مهرگان','Mehregan home')"><span class="wordmark-symbol">m<span>•</span></span><b>{{t('مهرگان پارس','Mehregan Pars')}}</b></RouterLink><nav class="global-links" :aria-label="t('منوی اصلی','Main navigation')"><RouterLink to="/" @mouseenter="opened=''">{{t('خانه','Home')}}</RouterLink><RouterLink v-for="g in groups" :key="g.id" :to="g.path" :aria-expanded="opened===g.id" :aria-controls="'menu-'+g.id" @mouseenter="opened=g.id">{{g.label}}</RouterLink><RouterLink to="/about" @mouseenter="opened=''">{{t('درباره ما','About us')}}</RouterLink><RouterLink to="/contact" @mouseenter="opened=''">{{t('ارتباط با ما','Contact us')}}</RouterLink></nav><div class="global-tools"><button class="nav-icon" @click="toggle('search')" :aria-expanded="opened==='search'" :aria-label="t('جست‌وجو','Search')"><Search :size="18"/></button><button class="mobile-menu nav-icon" @click="mobile=!mobile;opened=''" :aria-expanded="mobile" :aria-label="t('منوی اصلی','Main navigation')"><X v-if="mobile" :size="20"/><Menu v-else :size="20"/></button></div></div>
+ <div class="global-bar"><RouterLink to="/" class="wordmark" :aria-label="t('صفحه اصلی مهرگان','Mehregan home')"><img class="wordmark-icon" src="/images/icon.png" alt="" width="42" height="42"/><b>{{t('مهرگان پارس','Mehregan Pars')}}</b></RouterLink><nav class="global-links" :aria-label="t('منوی اصلی','Main navigation')"><RouterLink to="/" @mouseenter="opened=''">{{t('خانه','Home')}}</RouterLink><RouterLink v-for="g in groups" :key="g.id" :to="g.path" :aria-expanded="opened===g.id" :aria-controls="'menu-'+g.id" @mouseenter="opened=g.id">{{g.label}}</RouterLink><RouterLink to="/about" @mouseenter="opened=''">{{t('درباره ما','About us')}}</RouterLink><RouterLink to="/contact" @mouseenter="opened=''">{{t('ارتباط با ما','Contact us')}}</RouterLink><SlidingIndicator :active-key="route.path" selector=".router-link-exact-active, a.router-link-active:not([href='/'])"/></nav><div class="global-tools"><LanguageButton/><button class="nav-icon" @click="toggle('search')" :aria-expanded="opened==='search'" :aria-label="t('جست‌وجو','Search')"><Search :size="18"/></button><button class="mobile-menu nav-icon" @click="mobile=!mobile;opened=''" :aria-expanded="mobile" :aria-label="t('منوی اصلی','Main navigation')"><X v-if="mobile" :size="20"/><Menu v-else :size="20"/></button></div></div>
  <div v-if="mobile" class="mobile-global"><RouterLink to="/">{{t('خانه','Home')}}</RouterLink><RouterLink v-for="g in groups" :key="g.id" :to="g.path">{{g.label}}</RouterLink><RouterLink to="/about">{{t('درباره ما','About us')}}</RouterLink><RouterLink to="/contact">{{t('ارتباط با ما','Contact us')}}</RouterLink></div>
  <Transition name="mega"><section v-if="opened" :id="'menu-'+opened" class="mega-panel"><div class="mega-inner">
  <template v-if="opened==='brands'"><div class="mega-primary"><span>{{t('یک خانواده، برای حال بهتر','One family. Better wellbeing.')}}</span><RouterLink to="/platforms">{{t('دنیای مهرگان را کشف کنید','Meet the Mehregan family')}} <ArrowUpLeft :size="24"/></RouterLink><p>{{t('از مراقبت حضوری تا همراهی دیجیتال؛ مسیر خودتان را پیدا کنید.','From in-person care to digital support. Find your way forward.')}}</p></div><div class="mega-brand-list"><RouterLink v-for="p in platforms" :key="p.slug" :to="`/platforms/${p.slug}`"><strong>{{t(p.name)}}</strong><small>{{t(p.eyebrow)}}</small></RouterLink></div><div class="mega-aside"><span>{{t('قدم بعدی شما','Your next step')}}</span><RouterLink to="/platforms/health-center#booking">{{t('دریافت نوبت','Book an appointment')}}</RouterLink><RouterLink to="/contact">{{t('همکاری با مهرگان','Partner with us')}}</RouterLink></div></template>
@@ -44,8 +59,9 @@ onUnmounted(()=>revealObserver?.disconnect())
 </header>
 
 <div v-if="opened&&corporate" class="menu-scrim" @click="opened=''" aria-hidden="true"></div>
-<main><RouterView v-slot="{ Component }"><Transition name="page" mode="out-in" @after-enter="revealSections"><component :is="Component" :key="route.path" /></Transition></RouterView></main>
-<footer v-if="corporate" class="editorial-footer"><div class="wide footer-upper"><div class="footer-about"><RouterLink to="/" class="footer-wordmark">{{t('مهرگان.','mehregan.')}}</RouterLink><p>{{t('پنج مسیر تخصصی سلامت، زیر یک سقف. برای مراقبتی که همراه زندگی شما پیش می‌رود.','Five specialist paths under one roof. Care that moves with your life.')}}</p><RouterLink to="/contact" class="footer-cta">{{t('گفت‌وگو را شروع کنیم','Start a conversation')}} <ArrowUpLeft :size="17"/></RouterLink></div><div><span>{{t('مهرگان پارس','Mehregan Pars')}}</span><RouterLink to="/about">{{t('درباره ما','About us')}}</RouterLink><RouterLink to="/magazine">{{t('مجله سلامت','Health journal')}}</RouterLink><RouterLink to="/contact">{{t('ارتباط با ما','Contact us')}}</RouterLink><RouterLink to="/admin">{{t('پنل مدیریت','Administration')}}</RouterLink></div><div><span>{{t('پلتفرم‌ها','Our brands')}}</span><RouterLink v-for="p in platforms" :key="p.slug" :to="`/platforms/${p.slug}`">{{t(p.name)}}</RouterLink></div><div class="footer-contact"><span>{{t('راه‌های ارتباطی','Get in touch')}}</span><RouterLink to="/contact?audience=general"><Mail :size="16"/>{{t('ارسال پیام','Send a message')}}</RouterLink><RouterLink to="/contact?audience=doctor"><Stethoscope :size="16"/>{{t('معرفی پزشک یا متخصص','Clinicians & specialists')}}</RouterLink><RouterLink to="/contact?audience=organization"><Building2 :size="16"/>{{t('همکاری سازمانی','Organisation partnerships')}}</RouterLink><p>{{t('از مسیر مناسب، پیام خود را ثبت کنید؛ درخواست شما در پنل مهرگان دریافت می‌شود.','Choose the right form. Your message will reach the Mehregan team inbox.')}}</p></div></div><div class="wide footer-base"><span>© {{t('گروه سلامت مهرگان پارس','Mehregan Pars Health Group')}}</span><span>مراقبت، پیوسته.</span></div></footer>
+<component :is="route.path==='/shop'?'div':'main'"><RouterView v-slot="{ Component }"><Transition name="page" mode="out-in" @after-enter="revealSections"><component :is="Component" :key="route.path" /></Transition></RouterView></component>
+<footer v-if="corporate" class="editorial-footer"><div class="wide footer-upper"><div class="footer-about"><RouterLink to="/" class="footer-wordmark">{{t('مهرگان','mehregan')}}</RouterLink><p>{{t('شش مسیر سلامت و مراقبت، برای همراهی در زندگی روزمره','Six paths to health and care for everyday life')}}</p><RouterLink to="/contact" class="footer-cta">{{t('گفت‌وگو را شروع کنیم','Start a conversation')}} <ArrowUpLeft :size="17"/></RouterLink></div><div><span>{{t('مهرگان پارس','Mehregan Pars')}}</span><RouterLink to="/about">{{t('درباره ما','About us')}}</RouterLink><RouterLink to="/magazine">{{t('مجله سلامت','Health journal')}}</RouterLink><RouterLink to="/contact">{{t('ارتباط با ما','Contact us')}}</RouterLink><RouterLink to="/admin">{{t('پنل مدیریت','Administration')}}</RouterLink></div><div><span>{{t('پلتفرم‌ها','Our brands')}}</span><RouterLink v-for="p in platforms" :key="p.slug" :to="`/platforms/${p.slug}`">{{t(p.name)}}</RouterLink></div><div class="footer-contact"><span>{{t('راه‌های ارتباطی','Get in touch')}}</span><RouterLink to="/contact?audience=general"><Mail :size="16"/>{{t('ارسال پیام','Send a message')}}</RouterLink><RouterLink to="/contact?audience=doctor"><Stethoscope :size="16"/>{{t('معرفی پزشک یا متخصص','Clinicians & specialists')}}</RouterLink><RouterLink to="/contact?audience=organization"><Building2 :size="16"/>{{t('همکاری سازمانی','Organisation partnerships')}}</RouterLink><p>{{t('از مسیر مناسب، پیام خود را ثبت کنید؛ درخواست شما در پنل مهرگان دریافت می‌شود.','Choose the right form. Your message will reach the Mehregan team inbox.')}}</p></div></div><div class="wide footer-base"><span>© {{t('گروه سلامت مهرگان پارس','Mehregan Pars Health Group')}}</span><span>{{ t("مراقبت، پیوسته.") }}</span></div></footer>
 </div>
 </template>
+
 

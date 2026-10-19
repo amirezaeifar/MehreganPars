@@ -17,7 +17,8 @@
 - `/platforms/physiopars`: فیزیوپارس
 - `/platforms/oncopars`: آنکوپارس
 - `/platforms/psychopars`: سایکوپارس
-- `/platforms/telenutrition`: تله‌تغذیه
+- `/platforms/hydrotherapy`: آب‌درمانی
+- `/shop`: فروشگاه لوازم فیزیوتراپی
 - `/admin`: نمای کلی هولدینگ و صندوق پیام‌های ارتباط با ما
 - `/admin/magazine`: ایجاد، ویرایش، انتشار و حذف مقاله‌ها
 - `/admin/platforms/:slug`: متخصصان، زمان‌بندی، زمان‌های آزاد و رزروشده و مدیریت نوبت‌های همان برند

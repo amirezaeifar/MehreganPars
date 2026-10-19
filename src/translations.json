@@ -4,7 +4,10 @@
   "فیزیوپارس": "Physiopars",
   "آنکوپارس": "Oncopars",
   "سایکوپارس": "Psychopars",
-  "تله‌تغذیه": "Telenutrition",
+  "آب‌درمانی": "Hydrotherapy",
+  "فروشگاه": "Shop",
+  "بازتوانی در آب": "Rehabilitation in water",
+  "لوازم فیزیوتراپی": "Physiotherapy supplies",
   "مراقبت حضوری": "In-person care",
   "فیزیوتراپی دیجیتال": "Digital physiotherapy",
   "همراهی در بازتوانی": "Recovery support",
@@ -364,5 +367,14 @@
   "فیزیوپارس مسیری برای آشنایی با برنامه‌های تخصصی فیزیوتراپی و تمرین‌های متناسب با نیازهای مختلف است.": "Physiopars introduces specialist physiotherapy programmes and exercises tailored to different needs.",
   "آنکوپارس بر نیازهای بازتوانی افراد درگیر سرطان و خانواده‌هایشان تمرکز دارد و مسیرهای حمایتی را معرفی می‌کند.": "Oncopars focuses on the rehabilitation needs of people living with cancer and their families, introducing relevant paths of support.",
   "سایکوپارس فضایی برای معرفی خدمات و محتوای مرتبط با سلامت روان و کیفیت زندگی در اکوسیستم مهرگان است.": "Psychopars brings together mental wellbeing services and reading on quality of life within the Mehregan family.",
-  "تله‌تغذیه مسیر دسترسی به راهنمایی و برنامه‌های تغذیه‌ای را در قالب خدمات دیجیتال معرفی می‌کند.": "Telenutrition introduces digital ways to access nutrition guidance and food planning."
+  "حرکت و بازتوانی با همراهی متخصص در محیط آب.": "Movement and rehabilitation in water with specialist support.",
+  "پک‌ها و لوازم مصرفی فیزیوتراپی برای مراقبت در خانه.": "Physiotherapy kits and supplies for care at home.",
+  "آب‌درمانی مهرگان مسیر آشنایی با تمرین‌های درمانی در آب و ارزیابی تناسب آن‌ها با شرایط هر فرد است.": "Mehregan hydrotherapy introduces exercises in water and helps assess whether they suit your needs.",
+  "فروشگاه مهرگان مجموعه‌ای از پک‌های کمر، گردن و زانو و لوازم کاربردی فیزیوتراپی را معرفی می‌کند.": "The Mehregan shop features back, neck and knee kits alongside useful physiotherapy supplies.",
+  "ارزیابی پیش از آب‌درمانی": "Assessment before hydrotherapy",
+  "تمرین درمانی در آب": "Therapeutic exercise in water",
+  "بازتوانی حرکت": "Movement rehabilitation",
+  "پک مراقبت کمر": "Back care kit",
+  "پک مراقبت گردن": "Neck care kit",
+  "پک مراقبت زانو": "Knee care kit"
 }

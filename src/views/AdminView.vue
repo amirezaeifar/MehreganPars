@@ -23,9 +23,11 @@ function slugify(value: string) { return value.trim().toLowerCase().replace(/\s+
 function persist() {
   const next = { ...form, id: form.id || `${Date.now()}`, slug: form.slug.trim() || slugify(form.title), publishedAt: form.publishedAt.trim() || new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()) }
   if (articles.value.some(item => item.slug === next.slug && item.id !== next.id)) { toast.value = 'این نشانی مقاله قبلاً استفاده شده است. نشانی دیگری وارد کنید.'; return }
-  save(next)
+  try {
+  const queued = save(next)
   editing.value = false
-  toast.value = 'مقاله در این مرورگر ذخیره شد.'
+  toast.value = queued ? 'تغییر برای تأیید مدیر اصلی ارسال شد.' : 'مقاله در این مرورگر ذخیره شد.'
+  } catch(e) { toast.value=(e as Error).message }
 }
 function toggle(item: Article) { save({ ...item, status: item.status === 'published' ? 'draft' : 'published' }); toast.value = 'وضعیت مقاله تغییر کرد.' }
 function deleteArticle(item: Article) { if (window.confirm(`مقاله «${item.title}» حذف شود؟`)) { remove(item.id); toast.value = 'مقاله حذف شد.' } }

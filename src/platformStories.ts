@@ -32,10 +32,16 @@ export const platformStories: Record<string, Story> = {
     audience: ['وقتی می‌خواهید بیشتر به احساسات، عادت‌ها و کیفیت زندگی خود توجه کنید، سایکوپارس به شما کمک می‌کند مسیرهای مرتبط با سلامت روان را بشناسید.', 'When you want to pay closer attention to feelings, habits and quality of life, explore mental wellbeing through Psychopars.'],
     services: [ ['آشنایی با مفاهیم سلامت روان با زبانی نزدیک به زندگی روزمره.', 'Understand mental wellbeing through everyday language.'], ['توجه به عادت‌ها، استراحت و تعادل میان بخش‌های مختلف زندگی.', 'Explore habits, rest and balance in everyday life.'], ['شناخت مسیر گفت‌وگو و کمک گرفتن متناسب با دغدغه‌های شما.', 'Find a starting point for conversation and relevant support.'] ]
   },
-  telenutrition: {
-    image: '/images/nutrition.jpg', alt: ['مواد غذایی تازه برای یک وعده ساده', 'Fresh ingredients for a simple meal'],
-    title: ['تغذیه بهتر، نزدیک به سفره شما.', 'Good food. Your everyday table.'], note: ['عادت‌های کوچک روزانه', 'EVERYDAY NOURISHMENT'],
-    audience: ['اگر به دنبال شناخت نیازهای تغذیه‌ای و انتخاب‌های غذایی متناسب با زندگی خود هستید، با خدمات تله‌تغذیه آشنا شوید.', 'Explore Telenutrition to understand your nutrition needs and food choices that fit your life.'],
-    services: [ ['گفت‌وگو درباره نیازها، ترجیح‌ها و پرسش‌های تغذیه‌ای شما.', 'Discuss your nutrition needs, preferences and questions.'], ['آشنایی با برنامه غذایی با توجه به شرایط و عادت‌های فردی.', 'Explore food planning that considers your circumstances and habits.'], ['مرور مسیر و پرسش‌های تازه در ادامه تغییر عادت‌های غذایی.', 'Revisit progress and new questions as eating habits change.'] ]
+  hydrotherapy: {
+    image: '/images/directory-hydrotherapy.jpg', alt: ['استخر آب‌درمانی و تجهیزات تمرین در آب', 'Hydrotherapy pool and aquatic exercise equipment'],
+    title: ['حرکت در آب، با توجه به شما', 'Movement in water, shaped around you'], note: ['بازتوانی در آب', 'CARE IN WATER'],
+    audience: ['برای آشنایی با تمرین‌های درمانی در آب و بررسی تناسب آن با شرایط خود، از ارزیابی تخصصی شروع کنید.', 'Start with a specialist assessment to see whether hydrotherapy suits your needs.'],
+    services: [['ارزیابی وضعیت و هدف‌های حرکتی پیش از شروع', 'Assessment of movement goals before starting'], ['تمرین‌های فردی متناسب با توان و شرایط شما', 'Exercises adapted to your needs'], ['پیگیری مسیر بازتوانی با متخصص', 'Follow-up with a specialist']]
+  },
+  shop: {
+    image: '/images/directory-shop.jpg', alt: ['پک‌ها و لوازم مراقبت و فیزیوتراپی', 'Physiotherapy supplies and care kits'],
+    title: ['مراقبت در خانه، با ابزار مناسب', 'The right tools for care at home'], note: ['لوازم فیزیوتراپی', 'PHYSIOTHERAPY SUPPLIES'],
+    audience: ['پک‌های مراقبت کمر، گردن و زانو و لوازم مصرفی فیزیوتراپی را ببینید.', 'Explore care kits for the back, neck and knee, plus physiotherapy supplies.'],
+    services: [['پک مراقبت کمر برای استفاده روزمره', 'Back care kit for everyday use'], ['پک مراقبت گردن برای پشتیبانی بیشتر', 'Neck care kit for added support'], ['پک مراقبت زانو برای ادامه مسیر حرکت', 'Knee care kit for your movement journey']]
   }
 }

@@ -37,7 +37,7 @@ All active home, journal and care-directory image references now use local files
 | `movement.jpg` | Gentle standing movement beside a chair; daily-movement article and Physiopars. |
 | `knee-care.jpg` | Calm close-up of a seated person resting a hand above their knee; knee-care article. |
 | `quiet-moment.jpg` | A quiet moment looking into a garden; mental-wellbeing article and Psychopars. |
-| `nutrition.jpg` | Simple fresh salad, whole-grain bread and water; Telenutrition and nutrition draft cover. |
+| `nutrition.jpg` | Simple fresh salad, whole-grain bread and water; nutrition article draft cover. |
 
 Art direction: natural daylight, restrained sage and oak palette, simple compositions, no embedded lettering, no decorative medical overlays. The old SVG and PNG article assets are retained but are no longer selected by `articleImages.ts`.
 

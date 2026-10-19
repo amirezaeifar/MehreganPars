@@ -11,6 +11,7 @@ import AboutView from './views/AboutView.vue'
 import ContactView from './views/ContactView.vue'
 import AdminView from './views/AdminView.vue'
 import OperationsView from './views/OperationsView.vue'
+import ShopView from './views/ShopView.vue'
 import './style.css'
 import './style-pages.css'
 import './style-admin.css'
@@ -22,6 +23,8 @@ const router = createRouter({
   routes: [
     { path: '/', component: HomeView },
     { path: '/platforms', component: PlatformsView },
+    { path: '/shop', component: ShopView },
+    { path: '/platforms/shop', redirect: '/shop' },
     { path: '/platforms/:slug/overview', component: PlatformOverviewView },
     { path: '/platforms/:slug', component: PlatformView },
     { path: '/magazine', component: MagazineView },
@@ -43,3 +46,6 @@ import './refinements.css'
 import './site-updates.css'
 import './care-refresh.css'
 import './experience-refresh.css'
+import './shop.css'
+
+import './identity.css'
