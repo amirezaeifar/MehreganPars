@@ -56,9 +56,20 @@ async function clickText(selector,text){await evaluate(`([...document.querySelec
 try {
  await command('Runtime.enable');await command('Page.enable');await command('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});await visit('/');
  const start=await evaluate("document.querySelector('.global-links .sliding-indicator').style.transform");await click('.global-links a[href="/about"]');await wait(600);assert.notEqual(await evaluate("document.querySelector('.global-links .sliding-indicator').style.transform"),start);
- await visit('/');const tab=await evaluate("document.querySelector('.universe-tabs .sliding-indicator').style.transform");await click('#brand-tab-2');await wait(600);assert.notEqual(await evaluate("document.querySelector('.universe-tabs .sliding-indicator').style.transform"),tab);await evaluate("document.querySelector('.universe-tabs').scrollIntoView()");await capture('platform-palette-motion.png');
+ await visit('/')
+ const frame = () => evaluate("document.querySelector('.mode-photo').getBoundingClientRect().toJSON()")
+ const initial = await frame()
+ const photo = () => evaluate("document.querySelector('.mode-photo img.visible').currentSrc")
+ await evaluate("document.querySelector('.mode-photo').scrollIntoView({behavior:'instant'})")
+ await evaluate("Promise.all([...document.querySelectorAll('.mode-photo img')].map(img=>img.decode()))")
+ const firstPhoto = await photo()
+ await click('#mode-tab-1')
+ assert.notEqual(await photo(),firstPhoto)
+ const online = await frame()
+ assert.deepEqual([online.width,online.height],[initial.width,initial.height])
+ await capture('online-care.png')
  await visit('/shop');assert.equal(await evaluate("document.querySelectorAll('.store-category-grid button>svg').length"),0);
  await visit('/admin');assert(await evaluate("document.querySelector('.user-role').textContent.includes('امیر رضایی')"));const labels=await evaluate("[...document.querySelectorAll('.ops-sidebar nav:first-of-type>*')].map(x=>x.textContent.replace(/[0-9۰-۹]/g,'').trim())");assert.deepEqual(labels,['نمای کلی','صندوق ارتباط','تأیید اصلاحات','مجله سلامت','کاربران']);
  await visit('/platforms/physiopars');await evaluate("Promise.all([...document.querySelectorAll('.doctor-profile-top img')].map(i=>i.decode()))");assert.equal(await evaluate("document.querySelectorAll('.doctor-profile-top img').length"),4);await evaluate("document.querySelector('#doctors').scrollIntoView()");await capture('specialist-card-photos.png');
- await command('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:false});await visit('/');assert.equal(await evaluate('document.documentElement.scrollWidth>innerWidth'),false);await command('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});assert.equal(await evaluate("getComputedStyle(document.querySelector('.sliding-indicator')).transitionDuration"),'0s');assert.deepEqual(browserErrors,[]);console.log('PASS navigation and ecosystem moving indicators, reduced motion, admin name/order, category icons, doctor photos and mobile width')
+ await command('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:false});await visit('/');assert.equal(await evaluate('document.documentElement.scrollWidth>innerWidth'),false);await command('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});assert.equal(await evaluate("getComputedStyle(document.querySelector('.sliding-indicator')).transitionDuration"),'0s');assert.deepEqual(browserErrors,[]);console.log('PASS navigation indicator and care photos, reduced motion, admin name/order, category icons, doctor photos and mobile width')
 } finally {socket.close()}

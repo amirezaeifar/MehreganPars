@@ -38,6 +38,10 @@ async function visit(route) {
   }
   throw new Error('Navigation timed out: ' + route)
 }
+async function chooseLanguage(value) {
+  await click('.public-locale > button')
+  await click('.locale-options button[lang="'+value+'"]')
+}
 async function click(selector) { await evaluate('document.querySelector(' + JSON.stringify(selector) + ').click()'); await wait(120) }
 async function input(selector, value) {
   await evaluate('(()=>{const el=document.querySelector(' + JSON.stringify(selector) + ');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value").set.call(el,' + JSON.stringify(value) + ');el.dispatchEvent(new Event("input",{bubbles:true}))})()')
@@ -59,17 +63,17 @@ try {
   await visit('/')
   const persian = await evaluate("document.querySelector('h1').innerText")
   for (let i = 0; i < 2; i++) {
-    await click('.locale-button')
+    await chooseLanguage('en')
     assert.equal(await evaluate('document.documentElement.lang'), 'en')
     assert.match(await evaluate("document.querySelector('h1').innerText"), /By your side/)
-    assert.equal(await evaluate("document.querySelector('.locale-button span').innerText"), 'English')
-    await click('.locale-button')
+    assert.equal(await evaluate("document.querySelector('.public-locale > button > span').innerText"), 'English')
+    await chooseLanguage('fa')
     assert.equal(await evaluate("document.querySelector('h1').innerText"), persian)
   }
   assert.equal(await evaluate('!!document.querySelector(\'.global-links a[href="/shop"]\')'), false)
-  await click('#brand-tab-4')
-  assert.equal(await evaluate('!!document.querySelector(\'.shop-phone .app-visit a[href="/shop"]\')'), true)
-  console.log('PASS language round trips, current-language label, main menu and shop phone')
+  await click('#mode-tab-1')
+  assert.equal(await evaluate("document.querySelector('.mode-story.visible a').pathname"), '/platforms/physiopars')
+  console.log('PASS language round trips, current-language label, main menu and online care link')
   await visit('/platforms')
   const cards = await evaluate("Array.from(document.querySelectorAll('.family-card')).map(e=>({y:Math.round(e.getBoundingClientRect().y),width:e.getBoundingClientRect().width,featured:e.classList.contains('family-featured')}))")
   assert.equal(cards[3].y, cards[4].y)
@@ -117,7 +121,7 @@ try {
   assert.ok(await evaluate('document.documentElement.scrollWidth<=window.innerWidth+1'))
   await visit('/')
   assert.ok(await evaluate('document.documentElement.scrollWidth<=window.innerWidth+1'))
-  await click('.locale-button'); await click('.locale-button')
+  await chooseLanguage('ar'); await chooseLanguage('fa')
   assert.equal(await evaluate('document.documentElement.lang'), 'fa')
   assert.deepEqual(browserErrors, [])
   console.log('PASS mobile layout and language switching; no browser exceptions')
@@ -125,3 +129,4 @@ try {
   socket.close()
   fs.rmSync(pdf, { force: true })
 }
+

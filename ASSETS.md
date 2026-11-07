@@ -61,3 +61,38 @@ This section supersedes the image assignments above. These 17 original images we
 
 Final generation prompt: Create a premium natural editorial photograph for an Iranian integrated healthcare website's mission section 'Health is part of life'. Portrait 4:5 composition. A warm attentive female Iranian health specialist in a simple ivory tunic and neatly draped beige headscarf, seated at the same level as an adult woman wearing a muted burgundy cardigan and light headscarf, in a beautiful light-filled community wellness consultation room. They are having a relaxed genuine conversation about everyday wellbeing; both faces clearly visible in a three-quarter side view, gentle natural expressions, hands resting naturally on a small oak table with a simple open notebook. Not looking at camera. Large window with softly out-of-focus garden greenery, warm ivory walls, subtle dusty rose and deep burgundy accents matching an elegant health brand. The scene must communicate listening, thoughtful coordinated care and human connection, not generic outdoor lifestyle, not exercise, not a team meeting. Minimal composition, only two people, medium framing, both faces grouped within central 65 percent safe for website cropping, subtle realistic skin texture, soft daylight, sophisticated restrained magazine photography, no excessive props, no medical machinery, no logos, no text or watermark.
 
+
+## Documentary care photographs and public-site type
+
+The public pages use local WebP copies of these photographs. Each source labels the image public domain. People shown illustrate care activities. [DVIDS use conditions](https://www.dvidshub.net/about/copyright).
+
+| Local WebP | Subject | Source and photographer |
+| --- | --- | --- |
+| guided-exercise | Therapist demonstrates a movement | [Chance Nardone, U.S. Air Force](https://www.dvidshub.net/image/7270864) |
+| aquatic-exercise | Pool rehabilitation | [Jacob Derry, U.S. Air Force](https://www.dvidshub.net/image/6858006) |
+| counselling | Behavioural health consultation | [Dan Grubb](https://www.dvidshub.net/image/8831036) |
+| oncology-support | Breast health nurse advising a visitor | [Defense Health Agency, courtesy photograph](https://www.dvidshub.net/image/9976615) |
+| clinic-welcome | Family medicine reception | [Naval Hospital Jacksonville](https://www.dvidshub.net/image/7019963) |
+| knee-assessment | Supervised knee movement | [Maria Christina Yager](https://www.dvidshub.net/image/6359568) |
+| nutrition-session | Group nutrition education | [Rodney Jackson](https://www.dvidshub.net/image/9548400) |
+
+[Space Grotesk](https://github.com/floriankarsten/space-grotesk) has weights 300–700, SIL OFL 1.1 and no Persian alphabet. The public pages use locally hosted [Vazirmatn by Saber Rastikerdar](https://github.com/rastikerdar/vazirmatn), a Persian/Arabic sans with a 100–900 weight axis and open counters at headline scale. The distribution license is in public/fonts/Vazirmatn-OFL.txt.
+
+## Home-page documentary photography
+
+Home-specific WebP crops are stored in `public/images/home/`. The following DVIDS photographs illustrate care activities. They depict the original subjects and settings of the photographs.
+
+| Home asset | Original photograph |
+| --- | --- |
+| band-exercise | [Resistance-band exercise](https://www.dvidshub.net/image/7901669) |
+| movement-assessment | [Shoulder range-of-motion assessment](https://www.dvidshub.net/image/7797184) |
+| virtual-visit | [Scheduled virtual visit](https://www.dvidshub.net/image/8913563) |
+| shoulder-rehab | [Shoulder strengthening](https://www.dvidshub.net/image/3140952) |
+| patient-support | [Cancer care consultation](https://www.dvidshub.net/image/3138162) |
+| guided-breathing | [Mindfulness exercise](https://www.dvidshub.net/image/4298700) |
+| knee-support | [Knee brace](https://www.dvidshub.net/image/6359570) |
+| care-session | [Physical therapy clinic](https://www.dvidshub.net/image/7404253) |
+| daily-movement | [Exercise demonstration](https://www.dvidshub.net/image/1628254) |
+| knee-exercise | [Rehabilitation exercise](https://www.dvidshub.net/image/2778899) |
+| mindfulness | [Meditation practice](https://www.dvidshub.net/image/6371080) |
+| nutrition | [Food preparation](https://www.dvidshub.net/image/8305354) |

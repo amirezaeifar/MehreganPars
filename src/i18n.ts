@@ -1,18 +1,20 @@
 import { ref, watch } from 'vue'
 import translations from './translations.json'
+import arabic from './translations-ar.json'
 
-function savedLanguage(): 'fa' | 'en' {
-  try { return localStorage.getItem('mehregan-language') === 'en' ? 'en' : 'fa' } catch { return 'fa' }
+function savedLanguage(): 'fa' | 'en' | 'ar' {
+  try { return localStorage.getItem('mehregan-language') === 'ar' ? 'ar' : localStorage.getItem('mehregan-language') === 'en' ? 'en' : 'fa' } catch { return 'fa' }
 }
-export const language = ref<'fa' | 'en'>(savedLanguage())
-export function setLanguage(value: 'fa' | 'en') { language.value = value }
+export const language = ref<'fa' | 'en' | 'ar'>(savedLanguage())
+export function setLanguage(value: 'fa' | 'en' | 'ar') { language.value = value }
 export function t(fa: string, en?: string) {
   if (language.value === 'fa') return fa
   const key = fa.trim()
-  const translated = en || (translations as Record<string, string>)[key] || staticEnglish[key]
+  const translated = language.value === 'ar' ? (arabic as Record<string,string>)[key] || en || (translations as Record<string,string>)[key] || staticEnglish[key] : en || (translations as Record<string, string>)[key] || staticEnglish[key]
   return translated ? fa.replace(key, translated) : fa
 }
 const staticEnglish: Record<string, string> = {
+  'هر بار فقط یک فایل انتخاب کنید':'Choose one file at a time.',
   'مراقبت، پیوسته.':'Care, continuously.', 'تخصصی در مراقبت، نزدیک به زندگی':'Specialist care, close to life',
   'درباره مجموعه':'About this service', 'ارتباط با مهرگان':'Contact Mehregan', 'آشنایی با متخصصان':'Meet the specialists',
   'خدمات و مسیرهای مراقبت':'Care services and paths', 'انتخاب زمان ملاقات':'Choose an appointment', 'در کنار شما':'By your side',
@@ -95,13 +97,34 @@ const staticEnglish: Record<string, string> = {
   ,'کمی بیشتر با شما آشنا شویم.':'Tell us a little more about yourself.'
 }
 export function staticTranslation(value: string) { const trimmed=value.trim(); const translated=(translations as Record<string,string>)[trimmed] || staticEnglish[trimmed]; return translated ? value.replace(trimmed,translated) : value }
-export const locale = () => language.value === 'fa' ? 'fa-IR' : 'en-US'
-export function publicationDate(value: string) { return value }
+export const locale = () => language.value === 'ar' ? 'ar-SA' : language.value === 'fa' ? 'fa-IR' : 'en-US'
+const persianCalendar = new Intl.DateTimeFormat('en-US-u-ca-persian', {
+  year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC',
+})
+const englishDate = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeZone: 'UTC' })
+export function publicationDate(value: string) {
+  if (language.value !== 'en') return value
+  const digits = value.replace(/[۰-۹٠-٩]/g, digit => String(digit.charCodeAt(0) & 15))
+  const parts = /^(\d{4})[/-](\d{1,2})[/-](\d{1,2})$/.exec(digits.trim())
+  if (!parts) return digits
+  const [year, month, day] = parts.slice(1).map(Number)
+  if (month < 1 || month > 12 || day < 1 || day > 31) return digits
+  if (year >= 1700) return englishDate.format(Date.UTC(year, month - 1, day))
+  // Find Nowruz in UTC before applying the Persian month and day offsets.
+  for (let march = 19; march <= 22; march++) {
+    const start = Date.UTC(year + 621, 2, march)
+    if (persianCalendar.format(start) === `1/1/${year} AP`) {
+      const offset = (month - 1) * 30 + Math.min(month - 1, 6) + day - 1
+      return englishDate.format(start + offset * 86400000)
+    }
+  }
+  return digits
+}
 watch(language, value => {
   if (typeof document !== 'undefined') {
     document.documentElement.lang = value
-    document.documentElement.dir = value === 'fa' ? 'rtl' : 'ltr'
-    document.title = value === 'fa' ? 'مهرگان پارس | یک خانواده برای سلامت' : 'Mehregan Pars | Care for every day'
+    document.documentElement.dir = value === 'en' ? 'ltr' : 'rtl'
+    document.title = value === 'ar' ? 'مهرجان بارس | رعاية لكل يوم' : value === 'fa' ? 'مهرگان پارس | یک خانواده برای سلامت' : 'Mehregan Pars | Care for every day'
     try { localStorage.setItem('mehregan-language', value) } catch { /* The switch also works when storage is unavailable. */ }
   }
 }, { immediate: true })

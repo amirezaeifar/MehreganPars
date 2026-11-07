@@ -57,12 +57,10 @@ try {
  await command('Runtime.enable');await command('Page.enable')
  await command('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false})
  await visit('/');await evaluate("localStorage.setItem('mehregan-language','fa')");await visit('/')
- assert.equal(await evaluate("getComputedStyle(document.querySelector('.brand-rail')).borderRadius"),'18px')
- assert.equal(await evaluate("getComputedStyle(document.querySelector('.global-links a')).fontSize"),'13px')
- const brandColors={}
- for(let i=0;i<5;i++){await click('#brand-tab-'+i);const [slug,color]=await evaluate("[document.querySelector('.universe-stage').className.match(/brand-([\\w-]+)/)[1],getComputedStyle(document.querySelector('.universe-stage')).getPropertyValue('--product').trim()]");brandColors[slug]=color;assert.equal(await evaluate("getComputedStyle(document.querySelector('.universe-tabs .active')).color"),await evaluate("getComputedStyle(document.querySelector('.product-wordmark')).color"))}
- for(const [slug,color] of Object.entries(brandColors)){if(slug==='shop')continue;await visit('/platforms/'+slug);assert.equal(await evaluate("getComputedStyle(document.querySelector('.brand-site')).getPropertyValue('--accent').trim()"),color);await visit('/admin/platforms/'+slug);assert.equal(await evaluate("getComputedStyle(document.querySelector('.ops-page')).getPropertyValue('--accent').trim()"),color)}
- console.log('PASS consistent platform palettes, larger menu and rail shape')
+ const brandColors=await evaluate("Object.fromEntries([...document.querySelectorAll('.brand-rail a')].map(link=>[[...link.classList].find(c=>c.startsWith('brand-')).slice(6),getComputedStyle(link).getPropertyValue('--complement').trim()]))")
+ assert.equal(Object.keys(brandColors).length,4)
+ for(const [slug,color] of Object.entries(brandColors)){if(slug==='shop')continue;await visit('/platforms/'+slug);assert.equal(await evaluate("getComputedStyle(document.querySelector('.brand-site')).getPropertyValue('--complement').trim()"),color);await visit('/admin/platforms/'+slug);assert.equal(await evaluate("getComputedStyle(document.querySelector('.ops-page')).getPropertyValue('--complement').trim()"),color)}
+ console.log('PASS consistent shortcut and platform palettes')
  for(const audience of ['general','doctor','organization']){await visit('/contact?audience='+audience);const layout=await evaluate(`(()=>{const field=document.querySelector('.attachment-field');const message=document.querySelector('textarea');const subject=[...document.querySelectorAll('.form-grid label')].find(l=>l.textContent.includes('موضوع پیام'));return {before:!!(field.compareDocumentPosition(message)&Node.DOCUMENT_POSITION_FOLLOWING),top:field.getBoundingClientRect().top,subject:subject.getBoundingClientRect().top}})()`);assert(layout.before);assert(layout.top>layout.subject)}
  await capture('contact-organization-layout.png',true)
  await visit('/platforms/physiopars#booking');await evaluate("document.querySelector('.appointment-flow').scrollIntoView({behavior:'instant'})");await wait(400)
