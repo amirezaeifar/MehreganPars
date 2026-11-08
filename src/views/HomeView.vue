@@ -1,19 +1,11 @@
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
 import { ArrowUpLeft, Plus } from 'lucide-vue-next'
-import { platforms } from '../data'
 import { t, language } from '../i18n'
 import { useArticles } from '../store'
-import PlatformIcon from '../components/PlatformIcon.vue'
 import PlatformSequence from '../components/PlatformSequence.vue'
 import ArticleCard from '../components/ArticleCard.vue'
 const {published}=useArticles()
-const railItems=[
-  {slug:'health-center',label:'پلتفرم سلامت',en:'Health platform'},
-  {slug:'physiopars',label:'فیزیوتراپی',en:'Physiotherapy'},
-  {slug:'hydrotherapy',label:'آب‌درمانی',en:'Hydrotherapy'},
-  {slug:'shop',label:'فروشگاه',en:'Shop'},
-]
 const modes = [
   { label:'خدمات حضوری', en:'In-person', title:'در مجتمع سلامت مهرگان', heading:'At the health centre',
     text:'برای ارزیابی حرکت، فیزیوتراپی و آب‌درمانی به مجتمع سلامت مهرگان مراجعه کنید.',
@@ -47,13 +39,6 @@ async function navigateMode(event:KeyboardEvent){
 <div class="holding-home home-editorial">
 
 <section class="campaign-hero"><img class="campaign-photo" src="/images/home/band-training.webp" :alt="language==='ar' ? 'تمرين للكتفين باستخدام شريط مقاومة' : t('تمرین شانه با کش مقاومتی','A shoulder exercise with a resistance band')" fetchpriority="high" width="1920" height="1080"/><div class="campaign-shade"></div><div class="wide campaign-content"><span class="editorial-eyebrow">{{t('این‌جا، زندگی جریان دارد','HERE’S TO LIVING WELL')}}</span><h1>{{t('کنار شما،','By your side,')}}<br><span>{{t('برای روزهای بهتر','for better days')}}</span></h1><p>{{t('از حرکت و آب‌درمانی تا آرامش ذهن؛ در مهرگان، مراقبت متناسب با زندگی شماست','From movement and hydrotherapy to mental wellbeing, care at Mehregan fits your life')}}</p><a href="#ecosystem" class="pill pill-red">{{t('دنیای مهرگان را کشف کنید','Explore our world')}}<ArrowUpLeft :size="19"/></a></div><span class="hero-side-label">{{t('خانواده سلامت مهرگان','THE MEHREGAN FAMILY')}}</span></section>
-<nav class="brand-rail wide" :aria-label="t('مسیرهای مراقبت','Care paths')">
-  <div><RouterLink v-for="item in railItems" :key="item.slug" :class="'brand-'+item.slug"
-    :to="item.slug==='hydrotherapy'?'/platforms/hydrotherapy':'/#ecosystem'" @click="selected=item.slug==='health-center'?0:1">
-    <PlatformIcon :name="platforms.find(platform=>platform.slug===item.slug)?.icon||'heart'" :size="23"/>
-    <b>{{t(item.label,item.en)}}</b>
-  </RouterLink></div>
-</nav>
 <section id="ecosystem" class="care-modes">
   <div class="wide">
     <div class="family-introduction">
@@ -105,8 +90,18 @@ async function navigateMode(event:KeyboardEvent){
 </div>
 </template>
 
-
+<style scoped src="./home-editorial.css"></style>
 
 <style scoped src="./home-editorial.css"></style>
 
+<style scoped>
+.care-experience {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
 
+.journal-section {
+  margin-top: 0 !important;
+  padding-top: 60px !important;
+}
+</style>
